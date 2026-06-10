@@ -1,106 +1,64 @@
-# inflation-and-cpi-_analysis
-باشید، کل متن README به زبان فارسی برای کپی کردن در فایل README.md پروژه‌تان:
+# US Inflation Dynamics & Monetary Policy
 
-```markdown
-# پیش‌بینی تورم ایالات متحده با استفاده از مدل ترکیبی ARIMA-GARCH
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![ARIMA-GARCH](https://img.shields.io/badge/Model-ARIMA--GARCH-orange)]()
 
-## خلاصه پروژه
+## Overview
 
-این پروژه به بررسی پویایی‌های تورم در ایالات متحده و رابطه آن با نرخ بهره فدرال (نرخ وجوه فدرال) می‌پردازد. با استفاده از یک رویکرد تحلیلی دو مرحله‌ای (تحلیل اکتشافی داده‌ها و سپس مدل‌سازی پیشرفته سری زمانی)، یک مدل ترکیبی **ARIMA-GARCH** توسعه داده شده است که قادر به پیش‌بینی روند تورم و همچنین نوسانات بازار (تلاطم) می‌باشد.
+This project explores the relationship between **US inflation** and monetary policy (Federal Funds Rate). Using a two‑phase analytical approach – **Exploratory Data Analysis (EDA)** followed by **advanced time‑series modeling** – we built a hybrid **ARIMA‑GARCH** model that forecasts both inflation trends and market volatility. The final model achieves an **RMSE of 0.409**, demonstrating high predictive accuracy.
 
-### معیار اصلی عملکرد:
-- **RMSE نهایی:** 0.409  
-  (نشان‌دهنده دقت پیش‌بینی بالای مدل)
+## Key Findings
 
----
+- Inflation exhibits cyclical patterns and significant regime shifts over decades.
+- The Federal Funds Rate generally follows inflation trends, confirming its role as a primary monetary policy tool.
+- The correlation between inflation and interest rates is positive (~0.71) but **not static** – it varies with economic regimes (e.g., 1970s vs. 2010s).
+- ARIMA residuals show **volatility clustering**, indicating heteroskedasticity and justifying the need for a GARCH component.
 
-## 1. تحلیل اکتشافی داده‌ها (EDA)
+## Methodology
 
-در این مرحله، رفتار تاریخی تورم و همبستگی آن با عوامل اقتصادی خارجی مورد بررسی قرار گرفت.
+### 1. Exploratory Data Analysis (EDA)
 
-### روند تورم و نرخ بهره
-- سری زمانی تورم دارای الگوهای چرخه‌ای و تغییرات رژیمی قابل توجه در طی دهه‌های مختلف است.
-- نمودار مقایسه‌ای تورم و نرخ وجوه فدرال نشان می‌دهد که نرخ بهره عموماً از تورم پیروی می‌کند و به عنوان ابزار اصلی کنترل پولی عمل می‌نماید.
-- نمودار پراکندگی (Scatter Plot) رابطه خطی مثبت بین سطح تورم و نرخ‌های سیاستی فدرال رزرو را تأیید می‌کند.
+- **Time‑series plots** of inflation vs. Federal Funds Rate.
+- **Lag correlation** to identify lead‑lag relationships.
+- **Correlation heatmap** (coefficient ~0.71).
+- **Rolling correlation** to capture regime‑dependent dynamics.
 
-### همبستگی با وقفه (Lag Correlation)
-- با تحلیل وقفه‌ها، رابطه پیش‌تاز و پیرو (lead-lag) بین تورم و نرخ بهره شناسایی شد که نشان می‌دهد سیاست‌های پولی با چه سرعتی به شوک‌های تورمی واکنش نشان می‌دهند.
-- **نقشه حرارتی همبستگی:** ضریب همبستگی مثبت قوی در حدود **0.71** را نشان می‌دهد.
-- **همبستگی غلتان (Rolling Correlation):** این تحلیل نشان داد که همبستگی ثابت نیست و با توجه به محیط اقتصادی و رژیم‌های سیاستی (مثلاً دهه 1970 در مقایسه با دهه 2010) در نوسان است.
+### 2. Time‑Series Modeling (ARIMA)
 
----
+- Model trained to capture the underlying trend of inflation.
+- Initial 12‑month forecast based on historical averages.
+- Residual analysis revealed **volatility clustering** → GARCH needed.
 
-## 2. مدل‌سازی سری زمانی (ARIMA)
+### 3. Hybrid ARIMA‑GARCH Model
 
-پس از اکتشاف اولیه، از رویکرد آماری برای مدل‌سازی میانگین سری تورم استفاده شد.
+- **ARIMA** models the conditional mean (trend).
+- **GARCH** models the time‑varying conditional variance (volatility/risk).
+- Produces robust forecasts that account for both trend and uncertainty.
 
-### برازش مدل و پیش‌بینی اولیه
-- نمودار مقادیر واقعی در مقابل مقادیر برازش‌شده (ARIMA) نشان می‌دهد که این مدل در دنبال کردن جهت کلی تورم مؤثر است.
-- پیش‌بینی 12 ماهه بر اساس میانگین‌ها و روندهای تاریخی انجام شد.
+## Results
 
-### آنالیز باقیمانده‌ها و نیاز به GARCH
-- **خوشه‌بندی نوسانات (Volatility Clustering):** در تحلیل باقیمانده‌های مدل ARIMA، الگوی قابل توجهی از خوشه‌بندی نوسانات مشاهده شد. یعنی دوره‌های خطای بالا با دوره‌های خطای بالا دنبال می‌شوند که نشان می‌دهد واریانس ثابت نیست (ناهمسانی واریانس - Heteroskedasticity).
-- این یافته، ضرورت استفاده از مدل **GARCH** را توجیه می‌کند.
+- **Final Forecast**: ARIMA‑GARCH provides reliable inflation predictions for economic decision‑making.
+- **Performance Metric**: RMSE = **0.409**
+- **Volatility prediction** tracks conditional variance, quantifying forecast risk over time.
 
----
+## Technologies Used
 
-## 3. پیش‌بینی پیشرفته (ARIMA-GARCH)
+- **Python** – core language
+- **Pandas** – data manipulation
+- **Statsmodels** – ARIMA modeling
+- **Arch library** – GARCH modeling
+- **Matplotlib / Seaborn** – visualizations
 
-برای مدل‌سازی خوشه‌بندی نوسانات شناسایی شده در باقیمانده‌های ARIMA، جزء GARCH اضافه گردید.
+## Getting Started
 
-### پیش‌بینی تلاطم (نوسانات)
-- نمودار واریانس شرطی پیش‌بینی‌شده، میزان عدم قطعیت یا ریسک موجود در پیش‌بینی تورم را در طول زمان اندازه‌گیری می‌کند.
+### Prerequisites
 
-### پیش‌بینی نهایی ترکیبی
-- **خروجی نهایی پروژه:** مدل ARIMA-GARCH با در نظر گرفتن همزمان روند میانگین (ARIMA) و ریسک/نوسان متغیر با زمان (GARCH) پیش‌بینی مقاوم و قابل اعتمادتری برای تصمیم‌گیری‌های اقتصادی ارائه می‌دهد.
-
----
-
-## 4. نتیجه‌گیری
-
-گذار از تحلیل همبستگی ساده به یک مدل ترکیبی پیچیده، درک عمیق‌تری از پدیده تورم فراهم کرد. این پروژه نشان می‌دهد که اگرچه مدل ARIMA قادر به پیش‌بینی روند است، اما افزودن جزء GARCH برای جذب «شوک‌ها» و عدم قطعیت موجود در داده‌های مالی ضروری می‌باشد.
-
----
-
-## 5. نحوه اجرا (تکنولوژی‌ها و کتابخانه‌ها)
-
-این پروژه به طور کامل با زبان **Python** پیاده‌سازی شده است. کتابخانه‌های اصلی مورد استفاده:
-
-- `pandas` – برای پردازش و دستکاری داده‌ها
-- `statsmodels` – برای پیاده‌سازی مدل ARIMA
-- `arch` – برای پیاده‌سازی مدل GARCH
-- `matplotlib` / `seaborn` – برای مصورسازی داده‌ها
-
-### پیش‌نیازها
 ```bash
 pip install pandas statsmodels arch matplotlib seaborn
-```
-
-اجرای سریع (نمونه کد)
-
-```python
-# نمونه کد برای برازش مدل ARIMA-GARCH (تنها برای نشان دادن ساختار)
-from statsmodels.tsa.arima.model import ARIMA
-from arch import arch_model
-
-# برازش ARIMA روی سری تورم
-model_arima = ARIMA(inflation_series, order=(p, d, q))
-fitted_arima = model_arima.fit()
-
-# استخراج باقیمانده‌ها و برازش GARCH
-residuals = fitted_arima.resid
-model_garch = arch_model(residuals, vol='Garch', p=1, q=1)
-fitted_garch = model_garch.fit()
-
-# پیش‌بینی ترکیبی
-# ... (ادامه کد)
-```
-
----
-
-6. ساختار فایل‌ها
-
-```
-├── data/                   # داده‌های خام و پردازش شده
-├── notebooks/              # نوت‌بوک‌های Jupyter (EDA, ARIMA, GARCH)
-├── src/
+## Repository Structure
+├── data/               # Raw and processed datasets
+├── notebooks/          # EDA and modeling notebooks
+├── outputs/            # Plots and forecast results
+├── README.md           # This file
+└── requirements.txt    # Python dependencies
